@@ -1,0 +1,11 @@
+body {
+    background-color:black;
+    font-family:Courier, "Courier New", monospace;
+}
+
+.prompt {
+    color:green;
+    background-color:black;   
+    border:0px;
+}
+

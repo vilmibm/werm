@@ -1,0 +1,18 @@
+SYNOPSIS
+
+werm -- the text-based, programmable web framework
+
+provides a "web terminal" interface to both web content and server-side services.
+
+$PATH is first any javascript defined functions, then any remote procedures available via AJAX
+
+GOALS
+
+--New website aesthetic
+--(Ironic?) combination of old (text based interface) and new (AJAX)
+--Programmble URLs
+
+IMPLEMENTATION
+
+AJAX interface (jQuery + jQueryUI)
+any backend capable of AJAX access

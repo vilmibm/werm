@@ -6,19 +6,22 @@ var title = "werm";
 document.title = title;
 
 var ENTER = 13;
+var UP    = 38;
+var DOWN  = 40;
 var PROMPT_STR = "$: ";
+var history = new Array(); // XXX store commands in array for up/down arrow
+var funcs   = new Array();
+
 var CL;
 var command;
 var output;
-var history; // XXX store commands in array for up/down arrow
-
-var funcs = new Array();
 
 funcs["hello"] = function () { return "hello world!"; };
 
 google.setOnLoadCallback(function() {
     $("span.prompt").prepend(PROMPT_STR);
     CL = $("input.prompt");
+    CL.unbind();
     CL.keypress(run_command);
     CL.focus();
 });

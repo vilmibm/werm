@@ -28,12 +28,12 @@ google.setOnLoadCallback(function() {
 
 function run_command(e) {
     if ( e.which != ENTER ) { return; }
-    command = CL.attr("value");
+    command = CL.attr("value"); // XXX split by space for func/args
     // first try JS func
     if ( funcs[command] == undefined ) {
         output = "command not found";
     } else {
-        output = funcs[command]();
+        output = funcs[command](); // XXX pass args
     }
     CL.attr("value",'');
     $("span.prompt").before("<div>"+PROMPT_STR+command+"</div>");

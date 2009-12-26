@@ -6,6 +6,7 @@ var title = "werm";
 document.title = title;
 
 var ENTER = 13;
+var PROMPT_STR = "$: ";
 var CL;
 var command;
 var output;
@@ -16,6 +17,7 @@ var funcs = new Array();
 funcs["hello"] = function () { return "hello world!"; };
 
 google.setOnLoadCallback(function() {
+    $("span.prompt").prepend(PROMPT_STR);
     CL = $("input.prompt");
     CL.keypress(run_command);
     CL.focus();
@@ -31,7 +33,7 @@ function run_command(e) {
         output = funcs[command]();
     }
     CL.attr("value",'');
-    $("span.prompt").before("<div>$: "+command+"</div>");
+    $("span.prompt").before("<div>"+PROMPT_STR+command+"</div>");
     $("span.prompt").before("<div>"+output+"</div>");
 }
 

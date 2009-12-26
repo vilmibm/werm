@@ -9,27 +9,31 @@ var ENTER = 13;
 var CL;
 var command;
 var output;
+var history; // XXX store commands in array for up/down arrow
 
-function hello() {
-    return "hello world!";
-};
+var funcs = new Array();
+
+funcs["hello"] = function () { return "hello world!"; };
 
 google.setOnLoadCallback(function() {
     CL = $("input.prompt");
-    CL.keypress(function(e) {
-        if ( e.which != ENTER ) { return; }
-        command = CL.attr("value");
-        // first try JS func
-        output = eval(command + "()");
-        if ( !output ) {
-            output = "Command not found."; // XXX this doesn't work
-        }
-        CL.attr("value",'');
-        $("span.prompt").before("<div>"+command+"</div>");
-        $("span.prompt").before("<div>"+output+"</div>");
-    });
+    CL.keypress(run_command);
     CL.focus();
 });
+
+function run_command(e) {
+    if ( e.which != ENTER ) { return; }
+    command = CL.attr("value");
+    // first try JS func
+    if ( funcs[command] == undefined ) {
+        output = "command not found";
+    } else {
+        output = funcs[command]();
+    }
+    CL.attr("value",'');
+    $("span.prompt").before("<div>$: "+command+"</div>");
+    $("span.prompt").before("<div>"+output+"</div>");
+}
 
 
 

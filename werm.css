@@ -13,3 +13,11 @@ body {
     border:0px;
 }
 
+#cursor {
+    background-color:green;
+}
+
+#history {
+    font-size:50%;
+}
+

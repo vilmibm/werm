@@ -19,10 +19,6 @@ var output;
 funcs["hello"] = function () { return "hello world!"; };
 
 google.setOnLoadCallback(function() {
-    //$("#str").prepend(PROMPT_STR);
-    //CL = $("#box");
-    //$("body").keypress(key_catcher);
-    //CL.focus();
     $("span.prompt").prepend(PROMPT_STR);
     CL = $("input.prompt");
     CL.unbind();

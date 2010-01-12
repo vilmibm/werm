@@ -13,6 +13,14 @@ body {
     border:0px;
 }
 
+.old {
+  font-size:12pt;
+}
+
+.output {
+  font-size:14pt;
+}
+
 #cursor {
     background-color:green;
 }

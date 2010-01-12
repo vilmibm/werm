@@ -9,17 +9,47 @@ var ENTER = 13;
 var UP    = 38;
 var DOWN  = 40;
 var PROMPT_STR = "$: ";
-var hist = new Array(); // XXX store commands in array for up/down arrow
-var funcs   = new Array();
+var HIST_STR_DISP_SIZE = 10;
+var hist  = new Array(); // XXX store commands in array for up/down arrow
+var funcs = new Array();
 
 var CL;
 var command;
+var args;
 var output;
 
-funcs["hello"] = function () { return "hello world!"; };
+funcs["prompt_str"] = function (args) {
+    if ( args.length < 1 ) { return "Must supply a string"; }
+    PROMPT_STR = args.shift();
+    $("span.prompt").text(PROMPT_STR);
+    return "1";
+}
+
+funcs["hello"] = function (args) { return "hello world!"; };
+funcs["echo"]  = function (args) { return args.join(' '); };
+funcs["img"]   = function (args) {
+    if (args.length < 1) { return; }
+    return '<img src="'+args.shift()+'" />';
+}
+// XXX add support for nested operations
+funcs["math"]   = function (args) {
+    var op = args.shift();
+    var l  = new Number(args.shift());
+    var r  = new Number(args.shift());
+
+    var ops = new Array();
+    ops['+'] = function (l,r) { return l + r };
+    ops['-'] = function (l,r) { return l - r };
+    ops['*'] = function (l,r) { return l * r };
+    ops['/'] = function (l,r) { return l / r };
+
+    if ( ! ops[op] ) { return "Allowed operators: +, -, *, /"; }
+
+    return ops[op](l,r);
+}
 
 google.setOnLoadCallback(function() {
-    $("span.prompt").prepend(PROMPT_STR);
+    $("span.prompt").text(PROMPT_STR);
     CL = $("input.prompt");
     CL.unbind();
     CL.keypress(run_command);
@@ -30,34 +60,26 @@ var hist_len;
 
 function run_command(e) {
     if ( e.which != ENTER ) { return; }
-    command = CL.attr("value"); // XXX split by space for func/args
-    hist.push(command);
+    args = CL.attr("value").split(' '); // XXX become quote sensitive
+    command = args.shift();
+    hist.push(command+' '+args.join(' '));
     // first try JS func
     if ( funcs[command] == undefined ) {
         output = "command not found";
     } else {
-        output = funcs[command](); // XXX pass args
+        output = funcs[command](args);
     }
     CL.attr("value",'');
-    $("span.prompt").before("<div>"+PROMPT_STR+command+"</div>");
-    $("span.prompt").before("<div>"+output+"</div>");
+    $("span.prompt").before('<div class="old">'+PROMPT_STR+command+" "+args.join(' ')+"</div>");
+    $("span.prompt").before('<div class="output">'+output+"</div>");
     $("#history").empty();
     
     var i = hist.length - 1;
+    var hist_str;
     while (hist[i] != undefined && i > hist.length - 5) {
-        $("#history").append('<a onclick="">'+hist[i] + '</a>&nbsp;');
+        hist_str = hist[i];
+        if ( hist_str.length > HIST_STR_DISP_SIZE ) { hist_str = hist_str.substr(0,HIST_STR_DISP_SIZE)+"..."; }
+        $("#history").append('<a onclick="">'+hist_str+'</a>&nbsp;');
         i--;
     }
 }
-
-function key_catcher(e) {
-    if (e.which == 32 || (65 <= e.which && e.which <= 65 + 25)
-                        || (97 <= e.which && e.which <= 97 + 25)) {
-        var c = String.fromCharCode(e.which);
-        $("#box").append(document.createTextNode(c));
-    } 
-    else if (e.which == 8) {
-        $("#box").children(":last").remove();
-    }
-}
-

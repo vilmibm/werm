@@ -73,7 +73,7 @@ function run_command(e) {
         output = funcs[command](args);
     }
     CL.attr("value",'');
-    $("span.prompt").before('<div class="old">'+PROMPT_STR+command+" "+args.join(' ')+"</div>");
+    $("span.prompt").before('<div class="old">'+PROMPT_STR+hist[hist.length-1]+"</div>");
     $("span.prompt").before('<div class="output">'+output+"</div>");
     $("#history").empty();
     

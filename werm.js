@@ -1,7 +1,9 @@
 google.load("jquery", "1.3.2");
 google.load("jqueryui", "1.7.2");
 
-var title = "werm";
+var werm_version = "0.1";
+
+var title = "werm "+werm_version;
 
 document.title = title;
 
@@ -10,14 +12,14 @@ var UP    = 38;
 var DOWN  = 40;
 var PROMPT_STR = "$: ";
 var HIST_STR_DISP_SIZE = 10;
-var hist  = new Array(); // XXX store commands in array for up/down arrow
-var funcs = new Array();
+var hist  = new Array();
 
 var CL;
 var command;
 var args;
 var output;
 
+var funcs = new Array();
 funcs["prompt_str"] = function (args) {
     if ( args.length < 1 ) { return "Must supply a string"; }
     PROMPT_STR = args.shift();
@@ -49,6 +51,7 @@ funcs["math"]   = function (args) {
 }
 
 google.setOnLoadCallback(function() {
+    werm_load_lib('wermstd.js');
     $("span.prompt").text(PROMPT_STR);
     CL = $("input.prompt");
     CL.unbind();
@@ -82,4 +85,8 @@ function run_command(e) {
         $("#history").append('<a onclick="">'+hist_str+'</a>&nbsp;');
         i--;
     }
+}
+
+function werm_load_lib() {
+    // XXX use jQuery to load specified lib file
 }

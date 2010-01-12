@@ -11,3 +11,20 @@ funcs["img"]   = function (args) {
     if (args.length < 1) { return; }
     return '<img src="'+args.shift()+'" />';
 }
+
+// XXX add support for nested operations
+funcs["math"]   = function (args) {
+    var op = args.shift();
+    var l  = new Number(args.shift());
+    var r  = new Number(args.shift());
+
+    var ops = new Array();
+    ops['+'] = function (l,r) { return l + r };
+    ops['-'] = function (l,r) { return l - r };
+    ops['*'] = function (l,r) { return l * r };
+    ops['/'] = function (l,r) { return l / r };
+
+    if ( ! ops[op] ) { return "Allowed operators: +, -, *, /"; }
+
+    return ops[op](l,r);
+}
